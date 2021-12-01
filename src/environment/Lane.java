@@ -61,7 +61,6 @@ public class Lane {
 
 	// TODO : ajout de methodes
 	public boolean isSafe(Case c ){
-		//Ariane
 		if(c.ord != ord) return true;
 		for(Car car : cars) {
 			if (c.absc >= car.getLeftPosition().absc  && c.absc <= (car.getLeftPosition().absc + car.getLength()-1) )
@@ -78,12 +77,11 @@ public class Lane {
 			Car car = (Car)i.next();
 			car.move(b);
 		}
-		this.removeOldCars();
+		//this.removeOldCars();
 	}
 
 
 	private void removeOldCars() {
-		//Ariane
 		ArrayList<Car> toBeRemoved = new ArrayList();
 		Iterator i = this.cars.iterator();
 
@@ -91,11 +89,11 @@ public class Lane {
 		while(i.hasNext()) {
 			c = (Car)i.next();
 			if (leftToRight) {
-				if((c.getLeftPosition().absc + c.getLength()) == game.width)
+				if((c.getLeftPosition().absc ) == game.width)
 					toBeRemoved.add(c);
 			}
 			else
-				if(c.getLeftPosition().absc == 0)
+				if((c.getLeftPosition().absc + c.getLength()) == 0)
 					toBeRemoved.add(c);
 		}
 
