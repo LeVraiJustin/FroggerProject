@@ -1,4 +1,5 @@
-package environment;
+package infini;
+
 
 import gameCommons.Game;
 import gameCommons.IEnvironment;
@@ -7,19 +8,19 @@ import util.Case;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Environment implements IEnvironment {
+public class EnvironmentInf implements IEnvironment {
     private Game game;
-    private ArrayList<Lane> road;
+    private ArrayList<LaneInf> road;
 
-    public Environment(Game game) {
+    public EnvironmentInf(Game game) {
         this.game = game;
-        road = new ArrayList<Lane>();
+        road = new ArrayList<LaneInf>();
 
-        road.add(new Lane(game,0,0.0D));
-        for(int i = 1; i < game.height-1 ; ++i) {
-            this.road.add(new Lane(game, i));
+        road.add(new LaneInf(game,0,0.0D));
+        road.add(new LaneInf(game,1,0.0D));
+        for(int i = 2; i < game.height; ++i) {
+            this.road.add(new LaneInf(game, i));
         }
-        road.add(new Lane(game,game.height,0.0D));
     }
 
 
@@ -30,7 +31,7 @@ public class Environment implements IEnvironment {
 
     @Override
     public boolean isWinningPosition(Case c) {
-        return c.ord == game.height-1;
+        return false;
     }
 
     @Override
@@ -38,14 +39,12 @@ public class Environment implements IEnvironment {
         Iterator var2 = this.road.iterator();
 
         while(var2.hasNext()) {
-            Lane lane = (Lane)var2.next();
+            LaneInf lane = (LaneInf)var2.next();
             lane.update();
         }
     }
 
-    @Override
-    public void addLane() {
-        System.out.println("");
+    public void addLane(){
+        road.add(new LaneInf(game, road.size()));
     }
-
 }

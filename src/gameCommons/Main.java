@@ -9,6 +9,8 @@ import environment.Environment;
 import frog.Frog;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
+import infini.EnvironmentInf;
+import infini.FrogInf;
 
 public class Main {
 
@@ -16,7 +18,7 @@ public class Main {
 
 		//Caract�ristiques du jeu
 		int width = 26;
-		int height = 20;
+		int height = 30;
 		int tempo = 100;
 		int minSpeedInTimerLoops = 3; // Par défault : 3
 		double defaultDensity = 0.2; // Par défault : 0.2
@@ -26,13 +28,14 @@ public class Main {
 		//Cr�ation de la partie
 		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
 		//Cr�ation et liason de la grenouille
-		IFrog frog = new Frog(game);
+		IFrog frog = new FrogInf(game);
 		game.setFrog(frog);
 		graphic.setFrog(frog);
 		//Cr�ation et liaison de l'environnement
-		IEnvironment env = new Environment(game);
+		IEnvironment env = new EnvironmentInf(game);
 		game.setEnvironment(env);
-				
+
+
 		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes
 		Timer timer = new Timer(tempo, new ActionListener() {
 			@Override

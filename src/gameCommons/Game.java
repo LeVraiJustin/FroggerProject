@@ -16,6 +16,10 @@ public class Game {
 	public final int minSpeedInTimerLoops;
 	public final double defaultDensity;
 
+	//attribut ajouter pour partie3(infini)
+	public int score = 0;
+	public int maxScore = 0;
+
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
 	private IFrog frog;
@@ -78,7 +82,7 @@ public class Game {
 	public boolean testLose() {
 		if (!this.environment.isSafe((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez perdu !");
+			this.graphic.endGameScreen("Vous avez perdu !" + " Score : " + maxScore);
 			return true;
 		}
 		return false;
@@ -106,9 +110,12 @@ public class Game {
 	public void update() {
 		graphic.clear();
 		environment.update();
-		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		this.graphic.add(new Element(frog.getPosition().absc,1, Color.GREEN));
 		testLose();
 		testWin();
 	}
 
+	public void addLane() {
+		this.environment.addLane();
+	}
 }
