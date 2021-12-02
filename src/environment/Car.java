@@ -21,7 +21,7 @@ public class Car {
 		this.leftPosition = leftPosition;
 		this.leftToRight = leftToRight;
 
-		this.length = game.randomGen.nextInt(5) + 1;
+		this.length = game.randomGen.nextInt(3) + 1;
 
 		if(leftToRight)
 			this.leftPosition = new Case(leftPosition.absc - this.length, leftPosition.ord);

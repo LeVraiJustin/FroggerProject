@@ -7,6 +7,9 @@ import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
 
 public class Game {
+	private int nbTime = 1;
+	long startTime = System.currentTimeMillis();
+
 
 	public final Random randomGen = new Random();
 
@@ -78,7 +81,13 @@ public class Game {
 	public boolean testLose() {
 		if (!this.environment.isSafe((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez perdu !");
+			if(nbTime < 2){
+				nbTime=2;
+				long endTime = System.currentTimeMillis();
+				long t = (endTime-startTime)/1000;
+				this.graphic.endGameScreen("Vous avez perdu !" + " Temps : " + t + "s");
+			}
+
 			return true;
 		}
 		return false;
@@ -93,7 +102,12 @@ public class Game {
 	public boolean testWin() {
 		if (this.environment.isWinningPosition((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez gagné !");
+			if(nbTime < 2){
+				nbTime=2;
+				long endTime = System.currentTimeMillis();
+				long t = (endTime-startTime)/1000;
+				this.graphic.endGameScreen("Vous avez gagné !" + " Temps : " + t + "s");
+			}
 			return true;
 		}
 		return false;

@@ -18,8 +18,8 @@ public class Main {
 		int width = 26;
 		int height = 20;
 		int tempo = 100;
-		int minSpeedInTimerLoops = 3; // Par défault : 3
-		double defaultDensity = 0.2; // Par défault : 0.2
+		int minSpeedInTimerLoops = 1; // Par défault : 3
+		double defaultDensity = 0.1; // Par défault : 0.2
 		
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);
