@@ -1,8 +1,11 @@
 package environment;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import caseSpecial.Piege;
+import graphicalElements.Element;
 import util.Case;
 import gameCommons.Game;
 
@@ -14,6 +17,8 @@ public class Lane {
 	private boolean leftToRight;
 	private double density;
 	private int timer;
+	private ArrayList<Piege>pieges = new ArrayList<>();
+	private boolean aAuMoinsUnPiege = false;
 
 	// TODO : Constructeur(s)
 	public Lane(Game game, int ord, double density){
@@ -22,6 +27,7 @@ public class Lane {
 		this.density = density;
 		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
 		this.leftToRight = game.randomGen.nextBoolean();
+
 
 		for(int i = 0; i < 4 * game.width; ++i) {
 			this.moveCars(true);
@@ -34,6 +40,11 @@ public class Lane {
 		this(game, ord, game.defaultDensity);
 	}
 
+	public Lane(Game game, int ord, int abscPiege){
+		this(game,ord,0.0D);
+		aAuMoinsUnPiege = true;
+		pieges.add(new Piege(game,new Case(abscPiege,ord)));
+	}
 
 	public void update() {
 
@@ -57,6 +68,9 @@ public class Lane {
 			this.timer = 0;
 		}
 
+		for(Piege p : pieges)
+			game.getGraphic().add(new Element(p.getPosition().absc , p.getPosition().ord, Color.BLACK));
+
 	}
 
 	// TODO : ajout de methodes
@@ -66,6 +80,10 @@ public class Lane {
 			if (c.absc >= car.getLeftPosition().absc  && c.absc <= (car.getLeftPosition().absc + car.getLength()-1) )
 				return false;
 		}
+		for(Piege p : pieges)
+			if(p.getPosition().absc == c.absc && p.getPosition().ord == c.ord)
+				return false;
+
 		return true;
 	}
 

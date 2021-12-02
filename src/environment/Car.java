@@ -11,7 +11,7 @@ public class Car {
 	private Case leftPosition;
 	private boolean leftToRight;
 	private int length;
-	private final Color colorLtR = Color.BLACK;
+	private final Color colorLtR = Color.RED;
 	private final Color colorRtL = Color.BLUE;
 
 	// Constructeurs //

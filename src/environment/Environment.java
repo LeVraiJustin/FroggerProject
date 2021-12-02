@@ -1,5 +1,6 @@
 package environment;
 
+import caseSpecial.Piege;
 import gameCommons.Game;
 import gameCommons.IEnvironment;
 import util.Case;
@@ -16,10 +17,14 @@ public class Environment implements IEnvironment {
         road = new ArrayList<Lane>();
 
         road.add(new Lane(game,0,0.0D));
-        for(int i = 1; i < game.height - 1; ++i) {
+        for(int i = 1; i < game.height - 1; i=i+4) {
             this.road.add(new Lane(game, i));
+            this.road.add(new Lane(game, i+1));
+            this.road.add(new Lane(game, i+2));
+            this.road.add(new Lane(game, i+3, game.randomGen.nextInt(game.width)+1));
         }
         road.add(new Lane(game,game.height-1,0.0D));
+
     }
 
 
@@ -41,6 +46,7 @@ public class Environment implements IEnvironment {
             Lane lane = (Lane)var2.next();
             lane.update();
         }
+
     }
 
 }

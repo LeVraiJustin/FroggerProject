@@ -15,8 +15,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		//Caract�ristiques du jeu
-		int width = 26;
-		int height = 20;
+		int width = 35;
+		int height = 35;
 		int tempo = 100;
 		int minSpeedInTimerLoops = 1; // Par défault : 3
 		double defaultDensity = 0.1; // Par défault : 0.2
