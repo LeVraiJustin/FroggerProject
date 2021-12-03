@@ -1,23 +1,36 @@
 package environment;
 
+import gameCommons.Game;
+import util.Case;
+
 import java.util.ArrayList;
 
-import util.Case;
-import gameCommons.Game;
-
 public class Lane {
+
 	private Game game;
 	private int ord;
 	private int speed;
 	private ArrayList<Car> cars = new ArrayList<>();
 	private boolean leftToRight;
 	private double density;
+	private int tic;
 
-	// TODO : Constructeur(s)
+	public Lane(Game game, double density, int ord) {
+		this.game = game;
+		this.density = density;
+		this.ord = ord;
+		// leftToRight aléatoire
+		this.leftToRight = this.game.randomGen.nextBoolean();
+		// Vitesse aléatoire + Vitesse minimale
+		this.speed = this.game.randomGen.nextInt(this.game.minSpeedInTimerLoops) + 1;
+		this.tic = 0;
+		for (int i = 0 ; i < this.game.width ; i++) {
+			this.moveLane();
+			this.mayAddCar();
+		}
+	}
 
 	public void update() {
-
-		// TODO
 
 		// Toutes les voitures se d�placent d'une case au bout d'un nombre "tic
 		// d'horloge" �gal � leur vitesse
@@ -28,10 +41,93 @@ public class Lane {
 
 		// A chaque tic d'horloge, une voiture peut �tre ajout�e
 
+		tic++;
+		for (int i = 0; i < this.cars.size(); i++) {
+			this.cars.get(i).graphicUpdate();
+		}
+
+		if (this.tic == this.speed) {
+			this.moveLane();
+			this.mayAddCar();
+			this.tic = 0;
+		}
+
 	}
 
-	// TODO : ajout de methodes
+	public boolean isSafe(Case c) {
 
+		for (Car car : cars) {
+			// Pour l'ensemble des véhicules de la Lane
+			// On vérifie si une voiture est présente à l'endroit c
+			if (c.absc >= car.getLeftPosition().absc && c.absc <= (car.getLeftPosition().absc + car.getLength() - 1)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void moveLane() {
+
+		for (int i = 0; i < this.cars.size(); i++) {
+			this.cars.get(i).move();
+		}
+
+		this.clear();
+		//this.removeOldCars();
+		/*
+		Iterator<Car> it = this.cars.iterator();
+
+		while (it.hasNext()) {
+			Car i = it.next();
+		}
+
+		*/
+	}
+
+	public void clear() {
+
+		for (int i = 0; i < this.cars.size(); i++) {
+			if (leftToRight) {
+				if (this.cars.get(i).getLeftPosition().absc == game.width) {
+					this.cars.remove(this.cars.get(i));
+				}
+			} else {
+				if (this.cars.get(i).getLeftPosition().absc + this.cars.get(i).getLength() == 0) {
+					this.cars.remove(this.cars.get(i));
+				}
+			}
+		}
+
+	}
+
+	/*
+	private void removeOldCars() {
+
+		ArrayList<Car> toBeRemoved = new ArrayList();
+		Iterator i = this.cars.iterator();
+
+		Car c;
+		while(i.hasNext()) {
+			c = (Car)i.next();
+			if (leftToRight) {
+				if((c.getLeftPosition().absc ) == game.width)
+					toBeRemoved.add(c);
+			} else {
+				if ((c.getLeftPosition().absc + c.getLength()) == 0) {
+					toBeRemoved.add(c);
+				}
+			}
+
+		}
+
+		i = toBeRemoved.iterator();
+
+		while(i.hasNext()) {
+			c = (Car)i.next();
+			this.cars.remove(c);
+		}
+	}
+	*/
 	/*
 	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
 	 */

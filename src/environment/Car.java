@@ -14,17 +14,51 @@ public class Car {
 	private final Color colorLtR = Color.BLACK;
 	private final Color colorRtL = Color.BLUE;
 
-	// Constructeurs //
-	// Constructeur par défault //
+	// Constructeur //
+
 	public Car(Game game, Case leftPosition, boolean leftToRight) {
 		this.game = game;
 		this.leftPosition = leftPosition;
 		this.leftToRight = leftToRight;
-	}
-	
-	//TODO : ajout de methodes
+		// Taille aléatoire, avec une taille minimum de 1
+		this.length = 1 + this.game.randomGen.nextInt(2);
 
-	
+		// Position de départ en fonction de leftToRight
+		if (leftToRight) {
+			this.leftPosition = new Case(this.leftPosition.absc - this.length, this.leftPosition.ord);
+		} else {
+			this.leftPosition = new Case(this.leftPosition.absc, this.leftPosition.ord);
+		}
+	}
+
+	// Getters
+
+	public Case getLeftPosition() {
+		return this.leftPosition;
+	}
+
+	public int getLength() {
+		return this.length;
+	}
+
+	// Déplacement de la voiture
+
+	public void move() {
+
+		// Déplacement de gauche à droite
+		if (leftToRight) {
+			this.leftPosition = new Case(this.leftPosition.absc + 1, this.leftPosition.ord);
+		} else {
+			// Déplacement de droite à gauche
+			this.leftPosition = new Case(this.leftPosition.absc - 1, this.leftPosition.ord);
+		}
+
+		this.addToGraphics();
+	}
+
+	public void graphicUpdate() {
+		this.addToGraphics();
+	}
 	
 	/* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
 	private void addToGraphics() {

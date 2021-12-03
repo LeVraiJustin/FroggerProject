@@ -14,6 +14,7 @@ public class Frog implements IFrog {
 	/* Constructeur par défaut */
 	public Frog(Game game) {
 		this.game = game;
+		// On place la grenouille au centre
 		this.position = new Case(game.width / 2,0);
 		this.direction = Direction.up;
 	}

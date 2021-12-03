@@ -1,14 +1,14 @@
 package gameCommons;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 import frog.Frog;
-import givenEnvironment.GivenEnvironment;
+import environment.Environment;
+//import givenEnvironment.GivenEnvironment;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
 
@@ -18,7 +18,7 @@ public class Main {
 		int width = 26;
 		int height = 20;
 		int tempo = 100;
-		int minSpeedInTimerLoops = 200; // Par défault : 3
+		int minSpeedInTimerLoops = 50; // Par défault : 3
 		double defaultDensity = 0.1; // Par défault : 0.2
 		
 		//Cr�ation de l'interface graphique
@@ -30,7 +30,8 @@ public class Main {
 		game.setFrog(frog);
 		graphic.setFrog(frog);
 		//Cr�ation et liaison de l'environnement
-		IEnvironment env = new GivenEnvironment(game);
+		IEnvironment env = new Environment(game);
+		//IEnvironment env = new GivenEnvironment(game);
 		game.setEnvironment(env);
 				
 		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes
