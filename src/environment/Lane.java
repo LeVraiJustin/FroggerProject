@@ -42,16 +42,14 @@ public class Lane {
 	}
 
 	public Lane(Game game, int ord, int abscPiege){
-		this(game,ord,0.0D);
+		this(game,ord,game.defaultDensity);
 		pieges.add(new Piege(game,new Case(abscPiege,ord)));
 
-		if(abscPiege <= game.height){
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
+		if(abscPiege <= game.height/2){
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege + game.randomGen.nextInt(game.height/2)+1,ord)));
 		}
 		else
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
-
-
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2)+1,ord)));
 	}
 
 	public void update() {
@@ -80,7 +78,7 @@ public class Lane {
 			game.getGraphic().add(new Element(p.getPosition().absc , p.getPosition().ord, Color.BLACK));
 
 		for(CaseBonus b : caseBonus)
-			game.getGraphic().add(new Element(b.getPosition().absc , b.getPosition().ord, Color.WHITE));
+			game.getGraphic().add(new Element(b.getPosition().absc , b.getPosition().ord, Color.ORANGE));
 
 	}
 
