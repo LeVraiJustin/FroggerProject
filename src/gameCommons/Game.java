@@ -7,6 +7,8 @@ import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
 
 public class Game {
+	private int nbTimer = 1;
+	long startTime = System.currentTimeMillis();
 
 	public final Random randomGen = new Random();
 
@@ -82,7 +84,12 @@ public class Game {
 	public boolean testLose() {
 		if (!this.environment.isSafe((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez perdu !" + " Score : " + maxScore);
+			if(nbTimer < 2){
+				nbTimer++;
+				long endTime = System.currentTimeMillis();
+				long t =(endTime-startTime)/1000;
+				this.graphic.endGameScreen("Vous avez perdu !" + " Score : " + maxScore + " Temps : " + t + " s ");
+			}
 			return true;
 		}
 		return false;
