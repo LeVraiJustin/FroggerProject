@@ -46,10 +46,10 @@ public class Lane {
 		pieges.add(new Piege(game,new Case(abscPiege,ord)));
 
 		if(abscPiege <= game.height/2){
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege + game.randomGen.nextInt((game.height/2)-1)+1,ord)));
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege + game.randomGen.nextInt(game.height/2),ord)));
 		}
 		else
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt((game.height/2)-1)+1,ord)));
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
 
 
 	}
