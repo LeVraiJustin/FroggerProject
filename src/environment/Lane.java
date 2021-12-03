@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import caseSpecial.CaseBonus;
-import caseSpecial.Piege;
+import caseSpecial.Trap;
 import graphicalElements.Element;
+import waterLine.River;
 import util.Case;
 import gameCommons.Game;
+import waterLine.WoodLog;
 
 public class Lane {
 	private Game game;
@@ -18,8 +20,11 @@ public class Lane {
 	private boolean leftToRight;
 	private double density;
 	private int timer;
-	private ArrayList<Piege>pieges = new ArrayList<>();
+	private ArrayList<Trap> traps = new ArrayList<>();
 	private ArrayList<CaseBonus>caseBonus = new ArrayList<>();
+	private ArrayList<River> river = new ArrayList<>();
+	private boolean isRiver = false;
+	private ArrayList<WoodLog>woodLogs = new ArrayList<>();
 
 	// TODO : Constructeur(s)
 	public Lane(Game game, int ord, double density){
@@ -29,27 +34,39 @@ public class Lane {
 		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
 		this.leftToRight = game.randomGen.nextBoolean();
 
-
 		for(int i = 0; i < 4 * game.width; ++i) {
 			this.moveCars(true);
 			this.mayAddCar();
 		}
-
 	}
 
 	public Lane(Game game, int ord) {
 		this(game, ord, game.defaultDensity);
 	}
 
-	public Lane(Game game, int ord, int abscPiege){
+	public Lane(Game game, int ord, int abscTrap){
 		this(game,ord,game.defaultDensity);
-		pieges.add(new Piege(game,new Case(abscPiege,ord)));
+		traps.add(new Trap(game,new Case(abscTrap,ord)));
 
-		if(abscPiege <= game.height/2){
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege + game.randomGen.nextInt(game.height/2),ord)));
+		if(abscTrap <= game.height/2){
+			caseBonus.add(new CaseBonus(game,new Case(abscTrap + game.randomGen.nextInt(game.height/2-1)+1,ord)));
+		} else
+			caseBonus.add(new CaseBonus(game,new Case(abscTrap - game.randomGen.nextInt((game.height/2)-1)+1,ord)));
+	}
+
+	public Lane(Game game, int ord, boolean isRiver){
+		this.game =game;
+		this.ord = ord;
+		this.density = game.defaultDensity;
+		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
+		this.leftToRight = game.randomGen.nextBoolean();
+		this.isRiver = isRiver;
+
+		for(int i = 0; i < 40 * game.width; ++i) {
+			this.moveWoodLog(true);
+			mayAddCaWoodLog();
 		}
-		else
-			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
+		river.add(new River(game, ord,new Case(0,ord) ));
 	}
 
 	public void update() {
@@ -65,20 +82,30 @@ public class Lane {
 
 		// A chaque tic d'horloge, une voiture peut �tre ajout�e
 
+		for (Trap p : traps)
+			game.getGraphic().add(new Element(p.getPosition().absc, p.getPosition().ord, p.getColor()));
+
+		for (CaseBonus b : caseBonus)
+			game.getGraphic().add(new Element(b.getPosition().absc, b.getPosition().ord, b.getColor()));
+
+		for (River r : river) {
+			for (int i = 0; i < r.getLength(); i++)
+				game.getGraphic().add(new Element(0 + i, ord, r.getColor()));
+		}
+
 		++this.timer;
 		if (this.timer <= this.speed) {
 			this.moveCars(false);
+			/*if (isRiver)*/ moveWoodLog(false);
 		} else {
 			this.moveCars(true);
 			this.mayAddCar();
+			if (isRiver) {
+				this.moveWoodLog(true);
+				this.mayAddCaWoodLog();
+			}
 			this.timer = 0;
 		}
-
-		for(Piege p : pieges)
-			game.getGraphic().add(new Element(p.getPosition().absc , p.getPosition().ord, Color.BLACK));
-
-		for(CaseBonus b : caseBonus)
-			game.getGraphic().add(new Element(b.getPosition().absc , b.getPosition().ord, Color.ORANGE));
 
 	}
 
@@ -89,7 +116,7 @@ public class Lane {
 			if (c.absc >= car.getLeftPosition().absc  && c.absc <= (car.getLeftPosition().absc + car.getLength()-1) )
 				return false;
 		}
-		for(Piege p : pieges)
+		for(Trap p : traps)
 			if(p.getPosition().absc == c.absc && p.getPosition().ord == c.ord)
 				return false;
 
@@ -97,17 +124,67 @@ public class Lane {
 			if(b.getPosition().absc == c.absc && b.getPosition().ord == c.ord){
 				game.score++;
 				caseBonus.remove(0);
-
 			}
 
+		for(WoodLog w : woodLogs) {
+			if (c.absc >= w.getLeftPosition().absc  && c.absc <= (w.getLeftPosition().absc + w.getLength()-1) )
+				return true;
+		}
 
+		for(River r : river)
+			if( (c.absc>= r.getLeftCase().absc && c.ord <= (r.getLeftCase().absc + r.getLength()))){
 
+				return false;
+			}
 
 		return true;
 	}
 
 
 
+
+	//woodLog
+	private void moveWoodLog(boolean b) {
+		Iterator i = woodLogs.iterator();
+		while(i.hasNext()) {
+			WoodLog w = (WoodLog)i.next();
+			w.move(b);
+		}
+		this.removeOldWoodLog();
+	}
+
+	private void removeOldWoodLog() {
+		ArrayList<WoodLog> toBeRemoved = new ArrayList();
+		Iterator i = this.woodLogs.iterator();
+
+		WoodLog w;
+		while(i.hasNext()) {
+			w = (WoodLog) i.next();
+			if (leftToRight) {
+				if((w.getLeftPosition().absc ) == game.width)
+					toBeRemoved.add(w);
+			} else
+				if((w.getLeftPosition().absc + w.getLength()) == 0)
+					toBeRemoved.add(w);
+		}
+
+		i = toBeRemoved.iterator();
+
+		while(i.hasNext()) {
+			w = (WoodLog) i.next();
+			this.woodLogs.remove(w);
+		}
+	}
+
+	private void mayAddCaWoodLog() {
+		if (isRiver) {
+			if (game.randomGen.nextDouble() < density) {
+				woodLogs.add(new WoodLog(game, getBeforeFirstCase(), leftToRight));
+			}
+		}
+	}
+
+	//car
 	private void moveCars(boolean b) {
 		Iterator i = cars.iterator();
 		while(i.hasNext()) {
@@ -116,7 +193,6 @@ public class Lane {
 		}
 		this.removeOldCars();
 	}
-
 
 	private void removeOldCars() {
 		ArrayList<Car> toBeRemoved = new ArrayList();
@@ -130,8 +206,8 @@ public class Lane {
 					toBeRemoved.add(c);
 			}
 			else
-				if((c.getLeftPosition().absc + c.getLength()) == 0)
-					toBeRemoved.add(c);
+			if((c.getLeftPosition().absc + c.getLength()) == 0)
+				toBeRemoved.add(c);
 		}
 
 		i = toBeRemoved.iterator();
@@ -142,6 +218,7 @@ public class Lane {
 		}
 	}
 
+
 	/*
 	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
 	 */
@@ -151,7 +228,7 @@ public class Lane {
 	 * densit�, si la premi�re case de la voie est vide
 	 */
 	private void mayAddCar() {
-		if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+		if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase()) && !isRiver) {
 			if (game.randomGen.nextDouble() < density) {
 				cars.add(new Car(game, getBeforeFirstCase(), leftToRight));
 			}

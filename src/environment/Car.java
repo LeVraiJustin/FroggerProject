@@ -12,7 +12,7 @@ public class Car {
 	private boolean leftToRight;
 	private int length;
 	private final Color colorLtR = Color.RED;
-	private final Color colorRtL = Color.BLUE;
+	private final Color colorRtL = Color.darkGray;
 
 	// Constructeurs //
 	// Constructeur par défault //
