@@ -23,6 +23,7 @@ public class Game {
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
 	private IFrog frog;
+	private IFrog frog2;
 	private IFroggerGraphics graphic;
 
 	/**
@@ -55,6 +56,9 @@ public class Game {
 	public void setFrog(IFrog frog) {
 		this.frog = frog;
 	}
+	public void setFrog2(IFrog frog2) {
+		this.frog2 = frog2;
+	}
 
 	/**
 	 * Lie l'objet environment a la partie
@@ -80,7 +84,7 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		if (!this.environment.isSafe((frog.getPosition())))
+		if (!this.environment.isSafe((frog.getPosition())) || !this.environment.isSafe((frog2.getPosition())))
 		{
 			if(nbTime < 2){
 				nbTime=2;
@@ -91,6 +95,7 @@ public class Game {
 
 			return true;
 		}
+
 		return false;
 	}
 
@@ -101,7 +106,7 @@ public class Game {
 	 * @return true si la partie est gagn�e
 	 */
 	public boolean testWin() {
-		if (this.environment.isWinningPosition((frog.getPosition())))
+		if (this.environment.isWinningPosition((frog.getPosition())) || this.environment.isWinningPosition((frog2.getPosition())))
 		{
 			if(nbTime < 2){
 				nbTime=2;
@@ -122,6 +127,7 @@ public class Game {
 		graphic.clear();
 		environment.update();
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		this.graphic.add(new Element(frog2.getPosition(), Color.GREEN));
 		testLose();
 		testWin();
 	}

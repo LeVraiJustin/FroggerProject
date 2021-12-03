@@ -7,6 +7,7 @@ import javax.swing.Timer;
 
 import environment.Environment;
 import frog.Frog;
+import frog.Frog2;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 
@@ -29,6 +30,12 @@ public class Main {
 		IFrog frog = new Frog(game);
 		game.setFrog(frog);
 		graphic.setFrog(frog);
+
+		//Cr�ation et liason de la grenouille2
+		IFrog frog2 = new Frog2(game);
+		game.setFrog2(frog2);
+		graphic.setFrog2(frog2);
+
 		//Cr�ation et liaison de l'environnement
 		IEnvironment env = new Environment(game);
 		game.setEnvironment(env);

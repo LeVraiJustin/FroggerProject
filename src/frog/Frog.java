@@ -14,7 +14,7 @@ public class Frog implements IFrog {
 	/* Constructeur par défaut */
 	public Frog(Game game) {
 		this.game = game;
-		this.position = new Case(game.width / 2,0);
+		this.position = new Case((game.width / 3)*2,0);
 		this.direction = Direction.up;
 	}
 
