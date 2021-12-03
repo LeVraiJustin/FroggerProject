@@ -18,6 +18,7 @@ public class Game {
 	public final int height;
 	public final int minSpeedInTimerLoops;
 	public final double defaultDensity;
+	public int score = 0;
 
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
@@ -85,7 +86,7 @@ public class Game {
 				nbTime=2;
 				long endTime = System.currentTimeMillis();
 				long t = (endTime-startTime)/1000;
-				this.graphic.endGameScreen("Vous avez perdu !" + " Temps : " + t + "s");
+				this.graphic.endGameScreen("Vous avez perdu !" + " Score : " + score +  " Temps : " + t + "s");
 			}
 
 			return true;
@@ -106,7 +107,7 @@ public class Game {
 				nbTime=2;
 				long endTime = System.currentTimeMillis();
 				long t = (endTime-startTime)/1000;
-				this.graphic.endGameScreen("Vous avez gagné !" + " Temps : " + t + "s");
+				this.graphic.endGameScreen("Vous avez gagné !" +  " Score : " + score +   " Temps : " + t + "s");
 			}
 			return true;
 		}

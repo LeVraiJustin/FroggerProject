@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import caseSpecial.CaseBonus;
 import caseSpecial.Piege;
 import graphicalElements.Element;
 import util.Case;
@@ -18,7 +19,7 @@ public class Lane {
 	private double density;
 	private int timer;
 	private ArrayList<Piege>pieges = new ArrayList<>();
-	private boolean aAuMoinsUnPiege = false;
+	private ArrayList<CaseBonus>caseBonus = new ArrayList<>();
 
 	// TODO : Constructeur(s)
 	public Lane(Game game, int ord, double density){
@@ -42,8 +43,15 @@ public class Lane {
 
 	public Lane(Game game, int ord, int abscPiege){
 		this(game,ord,0.0D);
-		aAuMoinsUnPiege = true;
 		pieges.add(new Piege(game,new Case(abscPiege,ord)));
+
+		if(abscPiege <= game.height){
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
+		}
+		else
+			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt(game.height/2),ord)));
+
+
 	}
 
 	public void update() {
@@ -71,6 +79,9 @@ public class Lane {
 		for(Piege p : pieges)
 			game.getGraphic().add(new Element(p.getPosition().absc , p.getPosition().ord, Color.BLACK));
 
+		for(CaseBonus b : caseBonus)
+			game.getGraphic().add(new Element(b.getPosition().absc , b.getPosition().ord, Color.WHITE));
+
 	}
 
 	// TODO : ajout de methodes
@@ -84,6 +95,16 @@ public class Lane {
 			if(p.getPosition().absc == c.absc && p.getPosition().ord == c.ord)
 				return false;
 
+		for(CaseBonus b : caseBonus)
+			if(b.getPosition().absc == c.absc && b.getPosition().ord == c.ord){
+				game.score++;
+				caseBonus.remove(0);
+
+			}
+
+
+
+
 		return true;
 	}
 
@@ -95,7 +116,7 @@ public class Lane {
 			Car car = (Car)i.next();
 			car.move(b);
 		}
-		//this.removeOldCars();
+		this.removeOldCars();
 	}
 
 
