@@ -57,4 +57,5 @@ public class Frog implements IFrog {
 		// Update de la partie //
 		this.game.update();
 	}
+
 }

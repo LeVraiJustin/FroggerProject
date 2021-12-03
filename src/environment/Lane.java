@@ -33,7 +33,6 @@ public class Lane {
 		this.density = density;
 		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
 		this.leftToRight = game.randomGen.nextBoolean();
-
 		for(int i = 0; i < 4 * game.width; ++i) {
 			this.moveCars(true);
 			this.mayAddCar();
@@ -47,7 +46,6 @@ public class Lane {
 	public Lane(Game game, int ord, int abscTrap){
 		this(game,ord,game.defaultDensity);
 		traps.add(new Trap(game,new Case(abscTrap,ord)));
-
 		if(abscTrap <= game.height/2){
 			caseBonus.add(new CaseBonus(game,new Case(abscTrap + game.randomGen.nextInt(game.height/2-1)+1,ord)));
 		} else
@@ -61,7 +59,6 @@ public class Lane {
 		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
 		this.leftToRight = game.randomGen.nextBoolean();
 		this.isRiver = isRiver;
-
 		for(int i = 0; i < 40 * game.width; ++i) {
 			this.moveWoodLog(true);
 			mayAddCaWoodLog();
@@ -70,9 +67,7 @@ public class Lane {
 	}
 
 	public void update() {
-
 		// TODO
-
 		// Toutes les voitures se d�placent d'une case au bout d'un nombre "tic
 		// d'horloge" �gal � leur vitesse
 		// Notez que cette m�thode est appel�e � chaque tic d'horloge
@@ -88,10 +83,9 @@ public class Lane {
 		for (CaseBonus b : caseBonus)
 			game.getGraphic().add(new Element(b.getPosition().absc, b.getPosition().ord, b.getColor()));
 
-		for (River r : river) {
+		for (River r : river)
 			for (int i = 0; i < r.getLength(); i++)
 				game.getGraphic().add(new Element(0 + i, ord, r.getColor()));
-		}
 
 		++this.timer;
 		if (this.timer <= this.speed) {
@@ -132,10 +126,8 @@ public class Lane {
 		}
 
 		for(River r : river)
-			if( (c.absc>= r.getLeftCase().absc && c.ord <= (r.getLeftCase().absc + r.getLength()))){
-
+			if( (c.absc>= r.getLeftCase().absc && c.ord <= (r.getLeftCase().absc + r.getLength())))
 				return false;
-			}
 
 		return true;
 	}

@@ -10,7 +10,6 @@ public class Game {
 	private int nbTime = 1;
 	long startTime = System.currentTimeMillis();
 
-
 	public final Random randomGen = new Random();
 
 	// Caracteristique de la partie

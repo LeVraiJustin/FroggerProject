@@ -17,7 +17,7 @@ public class WoodLog {
         this.game = game;
         this.leftPosition = leftPosition;
         this.leftToRight = leftToRight;
-        this.length = game.randomGen.nextInt(4) + 2;
+        this.length = game.randomGen.nextInt(3) + 4;
 
         if(leftToRight)
             this.leftPosition = new Case(leftPosition.absc - this.length, leftPosition.ord);
