@@ -21,7 +21,7 @@ public class Car {
 		this.leftPosition = leftPosition;
 		this.leftToRight = leftToRight;
 		// Taille aléatoire, avec une taille minimum de 1
-		this.length = 1 + this.game.randomGen.nextInt(2);
+		this.length = 1 + this.game.randomGen.nextInt(3);
 
 		// Position de départ en fonction de leftToRight
 		if (leftToRight) {

@@ -1,12 +1,17 @@
 package gameCommons;
 
-import java.awt.Color;
-import java.util.Random;
-
 import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
+import util.Case;
+
+import java.awt.*;
+import java.util.Random;
 
 public class Game {
+
+	// Initialisation du timer
+	private int nbTimer = 1;
+	long startTime = System.currentTimeMillis();
 
 	public final Random randomGen = new Random();
 
@@ -15,6 +20,7 @@ public class Game {
 	public final int height;
 	public final int minSpeedInTimerLoops;
 	public final double defaultDensity;
+	public int playerScore = 0;
 
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
@@ -78,7 +84,12 @@ public class Game {
 	public boolean testLose() {
 		if (!this.environment.isSafe((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez perdu !");
+			if (nbTimer < 2) {
+				nbTimer++;
+				long endTime = System.currentTimeMillis();
+				long t = (endTime-startTime) / 1000;
+				this.graphic.endGameScreen("Vous avez perdu !" + " Score : " + this.playerScore + ", Temps : " + t + " s ");
+			}
 			return true;
 		}
 		return false;
@@ -106,9 +117,21 @@ public class Game {
 	public void update() {
 		graphic.clear();
 		environment.update();
-		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		this.graphic.add(new Element(this.frog.getPosition(), Color.GREEN));
+
 		testLose();
 		testWin();
 	}
 
+	public void addScore() {
+		this.playerScore++;
+	}
+
+	public void addLane() {
+		this.environment.addLane();
+	}
+
+	public Case frogPosition() {
+		return this.frog.getPosition();
+	}
 }

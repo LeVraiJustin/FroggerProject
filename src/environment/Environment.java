@@ -1,12 +1,11 @@
 package environment;
 
 import gameCommons.Game;
-import gameCommons.IEnvironment;
 import util.Case;
 
 import java.util.ArrayList;
 
-public class Environment implements IEnvironment {
+public class Environment {
 
     private Game game;
     private ArrayList<Lane> road;
@@ -32,22 +31,22 @@ public class Environment implements IEnvironment {
         this.road.add(new Lane(game, 0, this.game.height - 1));
     }
 
-    @Override
+    //@Override
     public boolean isSafe(Case c) {
         return this.road.get(c.ord).isSafe(c);
     }
 
-    @Override
+    //@Override
     public boolean isWinningPosition(Case c) {
         return c.ord == game.height - 1;
     }
 
-    // for infinite, when the frog is in the middle (game.height / 2) -> addLane
-    @Override
+    //@Override
     public void update() {
         for (int i = 0; i < this.road.size(); i++) {
             this.road.get(i).update();
         }
     }
+
 
 }

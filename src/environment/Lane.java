@@ -72,18 +72,12 @@ public class Lane {
 			this.cars.get(i).move();
 		}
 
+		// On enlève les voitures qui ont atteint l'autre côté
 		this.clear();
-		//this.removeOldCars();
-		/*
-		Iterator<Car> it = this.cars.iterator();
-
-		while (it.hasNext()) {
-			Car i = it.next();
-		}
-
-		*/
 	}
 
+	/** Enlève les voitures qui ont atteints l'autre côté
+	 */
 	public void clear() {
 
 		for (int i = 0; i < this.cars.size(); i++) {
@@ -100,34 +94,6 @@ public class Lane {
 
 	}
 
-	/*
-	private void removeOldCars() {
-
-		ArrayList<Car> toBeRemoved = new ArrayList();
-		Iterator i = this.cars.iterator();
-
-		Car c;
-		while(i.hasNext()) {
-			c = (Car)i.next();
-			if (leftToRight) {
-				if((c.getLeftPosition().absc ) == game.width)
-					toBeRemoved.add(c);
-			} else {
-				if ((c.getLeftPosition().absc + c.getLength()) == 0) {
-					toBeRemoved.add(c);
-				}
-			}
-
-		}
-
-		i = toBeRemoved.iterator();
-
-		while(i.hasNext()) {
-			c = (Car)i.next();
-			this.cars.remove(c);
-		}
-	}
-	*/
 	/*
 	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
 	 */
