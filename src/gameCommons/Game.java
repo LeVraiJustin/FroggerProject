@@ -104,7 +104,12 @@ public class Game {
 	public boolean testWin() {
 		if (this.environment.isWinningPosition((frog.getPosition())))
 		{
-			this.graphic.endGameScreen("Vous avez gagné !");
+			if (nbTimer < 2) {
+				nbTimer++;
+				long endTime = System.currentTimeMillis();
+				long t = (endTime-startTime) / 1000;
+				this.graphic.endGameScreen("Vous avez gagné !" + " Score : " + this.playerScore + ", Temps : " + t + " s ");
+			}
 			return true;
 		}
 		return false;

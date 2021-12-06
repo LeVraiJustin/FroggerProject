@@ -22,11 +22,19 @@ public class EnvironmentInf implements IEnvironment {
         // Avec l'ajout de chaque Lane
 
         // Ajout de la premiere Lane
-        this.road.add(new LaneInf(game, 0, 0));
+        this.road.add(new LaneInf(game, 0.0D, 0));
 
-        // Ajout des autres lignes
+        // Ajout des autres lignes + des lignes spéciales
         for (int i = 1 ; i < game.height ; i++) {
-            this.road.add(new LaneInf(game, this.game.defaultDensity, i));
+            if ( i % 3 == 0) {
+                this.road.add(new LaneInf(this.game, i, this.game.randomGen.nextInt(this.game.width)));
+                /*
+            } else if (i % 5 == 0) {
+                this.road.add((new LaneInf(this.game, i, true)));
+                 */
+            } else {
+                this.road.add(new LaneInf(game, this.game.defaultDensity, i));
+            }
         }
 
     }

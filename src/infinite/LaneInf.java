@@ -2,6 +2,9 @@ package infinite;
 
 import gameCommons.Game;
 import util.Case;
+import WaterLine.*;
+import specialCase.*;
+import graphicalElements.*;
 
 import java.util.ArrayList;
 
@@ -15,6 +18,15 @@ public class LaneInf {
     private double density;
     private int tic;
 
+    // Partie 4 CASES BONUS
+    private ArrayList<Trap> traps = new ArrayList<>();
+    private ArrayList<BonusCase>caseBonus = new ArrayList<>();
+    private ArrayList<River> river = new ArrayList<>();
+    private boolean isRiver = false;
+    private ArrayList<WoodLog> woodLogs = new ArrayList<>();
+
+
+    // Constructeur
     public LaneInf(Game game, double density, int ord) {
         this.game = game;
         this.density = density;
@@ -29,7 +41,39 @@ public class LaneInf {
             this.moveLane();
             this.mayAddCar();
         }
+    }
 
+    // Constructeur avec les cases bonus
+    public LaneInf(Game game, int ord, int abscTrap){
+
+        this.game = game;
+        this.ord = ord;
+
+        traps.add(new Trap(game,new Case(abscTrap,ord)));
+
+        if(abscTrap <= game.height/2) {
+            caseBonus.add(new BonusCase(game,new Case(abscTrap + game.randomGen.nextInt(game.height/2),ord)));
+        } else {
+            caseBonus.add(new BonusCase(game, new Case(abscTrap - game.randomGen.nextInt((game.height / 2)) + 1, ord)));
+        }
+    }
+
+    // Constructeur avec riviere
+    public LaneInf(Game game, int ord, boolean isRiver){
+
+        this.game =game;
+        this.ord = ord;
+        this.density = game.defaultDensity;
+        this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops) + 1;
+        this.leftToRight = game.randomGen.nextBoolean();
+        this.isRiver = isRiver;
+
+        for(int i = 0; i < game.width; ++i) {
+            this.moveWoodLog();
+            mayAddCaWoodLog();
+        }
+
+        river.add(new River(game, ord,new Case(0,ord) ));
     }
 
     public void update() {
@@ -43,6 +87,23 @@ public class LaneInf {
 
         // A chaque tic d'horloge, une voiture peut �tre ajout�e
 
+        // Pour les cases spéciales
+
+
+        for (Trap p : traps) {
+            game.getGraphic().add(new Element(p.getPosition().absc, p.getPosition().ord, p.getColor()));
+        }
+
+        for (BonusCase b : caseBonus) {
+            game.getGraphic().add(new Element(b.getPosition().absc, b.getPosition().ord, b.getColor()));
+        }
+
+        for (River r : river) {
+            for (int i = 0; i < r.getLength(); i++) {
+                game.getGraphic().add(new Element(0 + i, ord, r.getColor()));
+            }
+        }
+
         tic++;
         for (int i = 0; i < this.cars.size(); i++) {
             this.cars.get(i).graphicUpdate();
@@ -51,6 +112,11 @@ public class LaneInf {
         if (this.tic == this.speed) {
             this.moveLane();
             this.mayAddCar();
+
+            if (isRiver) {
+
+            }
+
             this.tic = 0;
         }
 
@@ -65,7 +131,66 @@ public class LaneInf {
                 return false;
             }
         }
+        for (Trap p : traps) {
+            if (p.getPosition().absc == c.absc && p.getPosition().ord == c.ord) {
+                return false;
+            }
+        }
+
+        for (BonusCase b : caseBonus) {
+            if(b.getPosition().absc == c.absc && b.getPosition().ord == c.ord) {
+                this.game.addScore();
+                caseBonus.remove(0);
+            }
+        }
+
+        for(WoodLog w : woodLogs) {
+            if (c.absc >= w.getLeftPosition().absc  && c.absc <= (w.getLeftPosition().absc + w.getLength()-1) ) {
+                return true;
+            }
+        }
+
+        for(River r : river) {
+            if ((c.absc >= r.getLeftCase().absc && c.ord <= (r.getLeftCase().absc + r.getLength()))) {
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    private void moveWoodLog() {
+
+        for (int i = 0 ; i < this.woodLogs.size() ; i++) {
+            this.woodLogs.get(i).move();
+        }
+
+    }
+
+    private void clearWoodlog() {
+
+        for (int i = 0; i < this.woodLogs.size(); i++) {
+            if (leftToRight) {
+                if (this.woodLogs.get(i).getLeftPosition().absc == game.width) {
+                    this.woodLogs.remove(this.woodLogs.get(i));
+                }
+            } else {
+                if (this.woodLogs.get(i).getLeftPosition().absc + this.woodLogs.get(i).getLength() == 0) {
+                    this.woodLogs.remove(this.woodLogs.get(i));
+                }
+            }
+        }
+
+    }
+
+    private void mayAddCaWoodLog() {
+
+        if (isRiver) {
+            if (game.randomGen.nextDouble() < density) {
+                woodLogs.add(new WoodLog(game, getBeforeFirstCase(), leftToRight));
+            }
+        }
+
     }
 
     public void moveLane() {

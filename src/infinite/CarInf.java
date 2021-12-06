@@ -11,8 +11,8 @@ public class CarInf {
     private Case leftPosition;
     private boolean leftToRight;
     private int length;
-    private final Color colorLtR = Color.BLACK;
-    private final Color colorRtL = Color.BLUE;
+    private final Color colorLtR = Color.LIGHT_GRAY;
+    private final Color colorRtL = Color.DARK_GRAY;
 
     // Constructeur //
 
