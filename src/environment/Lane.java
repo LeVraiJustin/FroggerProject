@@ -50,8 +50,6 @@ public class Lane {
 		}
 		else
 			caseBonus.add(new CaseBonus(game,new Case(abscPiege - game.randomGen.nextInt((game.height/2)-1)+1,ord)));
-
-
 	}
 
 	public void update() {
