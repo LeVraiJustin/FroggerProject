@@ -40,7 +40,6 @@ public class Car {
 	}
 
 	public void move(boolean b){
-		//Ariane
 		if(b){
 			if(leftToRight)
 				leftPosition = new Case(leftPosition.absc + 1, leftPosition.ord);

@@ -22,4 +22,13 @@ public class CaseBonus {
     public Color getColor(){
         return color;
     }
+
+    public boolean canAddScore(Case c) {
+        if(c.ord != position.ord ) return false;
+        if (position.absc == c.absc && position.ord == c.ord) {
+            return true;
+        }
+        return  false;
+    }
+
 }

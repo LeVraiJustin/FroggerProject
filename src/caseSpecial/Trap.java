@@ -27,5 +27,11 @@ public class Trap {
             game.getGraphic().add(new Element(position.absc , position.ord, color));
         }
 
+        public boolean isSafe(Case c) {
+            if (position.absc == c.absc && position.ord == c.ord)
+                return false;
+            return true;
+        }
+
 
 }

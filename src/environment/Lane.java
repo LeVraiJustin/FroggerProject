@@ -4,8 +4,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import caseSpecial.CaseBonus;
-import caseSpecial.Trap;
 import graphicalElements.Element;
 import waterLine.River;
 import util.Case;
@@ -20,8 +18,7 @@ public class Lane {
 	private boolean leftToRight;
 	private double density;
 	private int timer;
-	private ArrayList<Trap> traps = new ArrayList<>();
-	private ArrayList<CaseBonus>caseBonus = new ArrayList<>();
+
 	private ArrayList<River> river = new ArrayList<>();
 	private boolean isRiver = false;
 	private ArrayList<WoodLog>woodLogs = new ArrayList<>();
@@ -43,14 +40,6 @@ public class Lane {
 		this(game, ord, game.defaultDensity);
 	}
 
-	public Lane(Game game, int ord, int abscTrap){
-		this(game,ord,game.defaultDensity);
-		traps.add(new Trap(game,new Case(abscTrap,ord)));
-		if(abscTrap <= game.height/2){
-			caseBonus.add(new CaseBonus(game,new Case(abscTrap + game.randomGen.nextInt(game.height/2-1)+1,ord)));
-		} else
-			caseBonus.add(new CaseBonus(game,new Case(abscTrap - game.randomGen.nextInt((game.height/2)-1)+1,ord)));
-	}
 
 	public Lane(Game game, int ord, boolean isRiver){
 		this.game =game;
@@ -77,12 +66,6 @@ public class Lane {
 
 		// A chaque tic d'horloge, une voiture peut �tre ajout�e
 
-		for (Trap p : traps)
-			game.getGraphic().add(new Element(p.getPosition().absc, p.getPosition().ord, p.getColor()));
-
-		for (CaseBonus b : caseBonus)
-			game.getGraphic().add(new Element(b.getPosition().absc, b.getPosition().ord, b.getColor()));
-
 		for (River r : river)
 			for (int i = 0; i < r.getLength(); i++)
 				game.getGraphic().add(new Element(0 + i, ord, r.getColor()));
@@ -90,7 +73,7 @@ public class Lane {
 		++this.timer;
 		if (this.timer <= this.speed) {
 			this.moveCars(false);
-			/*if (isRiver)*/ moveWoodLog(false);
+			if (isRiver) moveWoodLog(false);
 		} else {
 			this.moveCars(true);
 			this.mayAddCar();
@@ -110,15 +93,7 @@ public class Lane {
 			if (c.absc >= car.getLeftPosition().absc  && c.absc <= (car.getLeftPosition().absc + car.getLength()-1) )
 				return false;
 		}
-		for(Trap p : traps)
-			if(p.getPosition().absc == c.absc && p.getPosition().ord == c.ord)
-				return false;
 
-		for(CaseBonus b : caseBonus)
-			if(b.getPosition().absc == c.absc && b.getPosition().ord == c.ord){
-				game.score++;
-				caseBonus.remove(0);
-			}
 
 		for(WoodLog w : woodLogs) {
 			if (c.absc >= w.getLeftPosition().absc  && c.absc <= (w.getLeftPosition().absc + w.getLength()-1) )
@@ -212,7 +187,7 @@ public class Lane {
 
 
 	/*
-	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
+	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase()
 	 */
 
 	/**

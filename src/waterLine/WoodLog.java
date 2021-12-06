@@ -17,7 +17,7 @@ public class WoodLog {
         this.game = game;
         this.leftPosition = leftPosition;
         this.leftToRight = leftToRight;
-        this.length = game.randomGen.nextInt(3) + 4;
+        this.length = game.randomGen.nextInt(3) + 10;
 
         if(leftToRight)
             this.leftPosition = new Case(leftPosition.absc - this.length, leftPosition.ord);
@@ -29,7 +29,6 @@ public class WoodLog {
     public int getLength(){return length;}
 
     public void move(boolean b){
-        //Ariane
         if(b){
             if(leftToRight)
                 leftPosition = new Case(leftPosition.absc + 1, leftPosition.ord);
